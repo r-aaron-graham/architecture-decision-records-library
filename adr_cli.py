@@ -38,13 +38,18 @@ def get_next_index() -> int:
     help="Status of the decision.",
 )
 def main(title: str, status: str) -> None:
-    index = get_next_index()
     slug = slugify(title)
+    if not slug:
+        raise click.BadParameter("Use at least one ASCII letter or digit", param_hint="--title")
+    index = get_next_index()
     filename = ADR_DIR / f"{index:04d}-{slug}.md"
     date = datetime.date.today().isoformat()
-    content = f"# {index:04d}. {title}\n\n" + f"*Status: {status}\n*Date: {date}\n\n" + "## Context\n\n" + "## Decision\n\n" + "## Consequences\n\n" + "## Alternatives\n\n"
-    with filename.open("w", encoding="utf-8") as f:
-        f.write(content)
+    content = f"# {index:04d}. {title}\n\n" + f"**Status:** {status}\n\n**Date:** {date}\n\n" + "## Context\n\n" + "## Decision\n\n" + "## Consequences\n\n" + "## Alternatives\n\n"
+    try:
+        with filename.open("x", encoding="utf-8") as f:
+            f.write(content)
+    except FileExistsError as exc:
+        raise click.ClickException("Another process created this record. Retry the command.") from exc
     click.echo(f"Created {filename}")
 
 

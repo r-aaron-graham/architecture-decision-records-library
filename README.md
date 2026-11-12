@@ -25,6 +25,7 @@ example.
 
 ## Using the CLI
 
+Install the dependency with `python -m pip install -r requirements.txt`.
 This repository includes a simple CLI (`adr_cli.py`) to create new
 ADR files.  To create a new record:
 
@@ -33,7 +34,9 @@ python adr_cli.py --title "Use PostgreSQL for metadata store" --status "accepted
 ```
 
 The script will generate a new file in the `adr/` directory with an
-incremented number and the provided title.
+incremented number and the provided title. Open the generated file to fill
+in the context, decision, trade-offs, and alternatives. The bundled example
+shows how those sections fit together.
 
 ## Conventions
 
